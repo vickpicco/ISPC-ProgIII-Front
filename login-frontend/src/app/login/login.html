@@ -1,14 +1,84 @@
 <div class="login-container">
-  <h2>Login</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" id="username" formControlName="username" required>
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" formControlName="password" required>
-    </div>
-    <button type="submit" [disabled]="!loginForm.valid">Login</button>
-  </form>
+  <div class="login-card">
+
+    @if (currentView === 'login') {
+      <div class="login-header">
+        <h2>Bienvenido</h2>
+        <p>Ingresa tus datos para continuar</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+        <div class="form-group">
+          <label for="username">Usuario</label>
+          <input type="text" id="username" formControlName="username" placeholder="Tu usuario" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" formControlName="password" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember"> Recordarme
+          </label>
+          <a href="javascript:void(0)" class="forgot-password" (click)="switchView('requestOtp')">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" [disabled]="!loginForm.valid" class="btn-primary">
+          Iniciar Sesión
+        </button>
+      </form>
+    }
+
+    @else if (currentView === 'requestOtp') {
+      <div class="login-header">
+        <h2>Recuperar cuenta</h2>
+        <p>Ingresa tu usuario para recibir un código</p>
+      </div>
+
+      <form [formGroup]="otpRequestForm" (ngSubmit)="onRequestOtpSubmit()">
+        <div class="form-group">
+          <label for="recovery-username">Usuario</label>
+          <input type="text" id="recovery-username" formControlName="username" placeholder="Tu usuario" required>
+        </div>
+
+        <button type="submit" [disabled]="!otpRequestForm.valid" class="btn-primary">
+          Enviar código
+        </button>
+        
+        <div class="form-footer">
+          <a href="javascript:void(0)" class="forgot-password" (click)="switchView('login')">Volver al Login</a>
+        </div>
+      </form>
+    }
+
+    @else if (currentView === 'resetPassword') {
+      <div class="login-header">
+        <h2>Cambiar contraseña</h2>
+        <p>Revisa la consola del backend y copia el código</p>
+      </div>
+
+      <form [formGroup]="passwordResetForm" (ngSubmit)="onResetPasswordSubmit()">
+        <div class="form-group">
+          <label for="otp-code">Código OTP (6 dígitos)</label>
+          <input type="text" id="otp-code" formControlName="otp" placeholder="123456" required>
+        </div>
+
+        <div class="form-group">
+          <label for="new-password">Nueva Contraseña</label>
+          <input type="password" id="new-password" formControlName="new_password" placeholder="Mínimo 8 caracteres" required>
+        </div>
+
+        <button type="submit" [disabled]="!passwordResetForm.valid" class="btn-primary">
+          Actualizar y entrar
+        </button>
+        
+        <div class="form-footer">
+          <a href="javascript:void(0)" class="forgot-password" (click)="switchView('login')">Cancelar</a>
+        </div>
+      </form>
+    }
+
+  </div>
 </div>
